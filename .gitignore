@@ -1,0 +1,6 @@
+*.o
+*.stash
+moc_*.*
+ui_*.*
+Makefile
+makefile
