@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
-    <height>188</height>
+    <width>691</width>
+    <height>255</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,19 +19,29 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>691</width>
+    <height>255</height>
+   </size>
+  </property>
   <property name="maximumSize">
    <size>
     <width>16777215</width>
-    <height>216</height>
+    <height>2000</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Create new shortcut</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../../Pictures/Icons/shortcut.ico</normaloff>../../../../Pictures/Icons/shortcut.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="20,80">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="labelShortcutName">
         <property name="text">
@@ -45,54 +55,85 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="20,80">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="30,70">
       <item>
-       <widget class="QLabel" name="labelExecutableFile">
+       <widget class="QPushButton" name="buttonExeFile">
         <property name="text">
-         <string>Executable file:</string>
+         <string>Select executable file</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="textExecutableFile"/>
+       <widget class="QLabel" name="textExecutableFile">
+        <property name="text">
+         <string>textExecutableFile</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="20,80">
+     <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="30,70">
       <item>
-       <widget class="QLabel" name="labelIcon">
+       <widget class="QPushButton" name="buttonIcon">
         <property name="text">
-         <string>Icon:</string>
+         <string>Select icon file</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="textIcon"/>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="10,20,40,20,10">
-      <item>
-       <widget class="QLabel" name="labelVersionInfo">
-        <property name="text">
-         <string>Version:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
+        <property name="iconSize">
          <size>
           <width>40</width>
-          <height>20</height>
+          <height>40</height>
          </size>
         </property>
-       </spacer>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="textIcon">
+        <property name="text">
+         <string>textIcon</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="30,40,30">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonCreate">
+          <property name="text">
+           <string>Create</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QLabel" name="labelLog">
@@ -105,22 +146,9 @@
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="buttonCreate">
+       <widget class="QLabel" name="labelVersionInfo">
         <property name="text">
-         <string>Create</string>
+         <string>Version:</string>
         </property>
        </widget>
       </item>
@@ -133,7 +161,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>783</width>
+     <width>691</width>
      <height>22</height>
     </rect>
    </property>

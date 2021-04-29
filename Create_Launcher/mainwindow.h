@@ -23,16 +23,16 @@ class MainWindow : public QMainWindow
         QString     m_ShortcutName;
         QString     m_ExecutableFile;
         QString     m_Icon;
-        QFile       *m_File;
-        QFile       *createFileOnDesktop(QString fileName);
+        bool        isTextBoxesEmpty();
+        QFile       *createFileOnDesktop(QString fileName, QByteArray content);
+        QString     commandLineFor_ExeFile(QString path);
+        void        convertExecutableFile(QFile *f);
         QByteArray  shortcutProperties();
-        void        writePropertiesToFile(QFile *f, QByteArray properties);
-        void        showLog(QString log);
-        void        hideLog();
-        bool        isFileExist(QString path);
-        void        convertToExecutableFile(QString path);
+        void        closeWithApostrophe(QString *string);
 
     private slots:
         void on_buttonCreate_clicked();
+        void on_buttonExeFile_clicked();
+        void on_buttonIcon_clicked();
 };
 #endif // MAINWINDOW_H

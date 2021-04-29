@@ -2,14 +2,18 @@
 #include "ui_mainwindow.h"
 
 #include <QFile>
+#include <QFileInfo>
+#include <QFileDialog>
 #include <QDebug>
 #include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    hideLog();
-    ui->labelVersionInfo->setText("Version: 1.0.0");
+    ui->labelLog->setText("");
+    ui->textExecutableFile->setText("");
+    ui->textIcon->setText("");
+    ui->labelVersionInfo->setText("Version: 2.0.0");
 }
 
 MainWindow::~MainWindow()
@@ -17,115 +21,130 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QFile* MainWindow::createFileOnDesktop(QString fileName)
+bool MainWindow::isTextBoxesEmpty()
 {
-    if(fileName.isEmpty())
-        return NULL;
-
-    QString path = "/home/" + qgetenv("USER")+"/Desktop/" + fileName + ".desktop";
-
-    if(isFileExist(path))
+    if(m_ShortcutName.isEmpty())
     {
-        showLog("File is already exist !");
-        return NULL;
+        ui->labelLog->setText("Enter shortcut name !!!");
+        return true;
     }
+
+    if(m_ExecutableFile.isEmpty())
+    {
+        ui->labelLog->setText("Select an executable file !!!");
+        return true;
+    }
+
+    if(m_Icon.isEmpty())
+    {
+        ui->labelLog->setText("Select an icon file !!!");
+        return true;
+    }
+
+    return false;
+}
+
+QFile* MainWindow::createFileOnDesktop(QString fileName, QByteArray content)
+{
+    QString path = "/home/" + qgetenv("USER")+"/Desktop/" + fileName;
 
     QFile *f;
     f = new QFile(path);
+
+    if(f->exists())
+        return NULL;
+
     f->open(QIODevice::WriteOnly);
+    f->write(content);
     f->close();
-    convertToExecutableFile(path);
     return f;
+}
+
+QString MainWindow::commandLineFor_ExeFile(QString path)
+{
+    QFileInfo info(path);
+    QString cmdString;
+
+    if(!(info.suffix() == "sh") && !(info.suffix() == ""))
+        cmdString.append("xdg-open ");
+
+    if(path.contains(" "))
+        closeWithApostrophe(&path);
+
+    cmdString.append(path.toLocal8Bit());
+
+    return cmdString;
+}
+
+void MainWindow::convertExecutableFile(QFile *f)
+{
+    QFileInfo info(f->fileName());
+    QString cmd = "chmod +x " + info.filePath();
+    QProcess::execute(cmd);
 }
 
 QByteArray MainWindow::shortcutProperties()
 {
     QByteArray content;
+
     content.append("#!/usr/bin/env xdg-open\n\n");
-    content.append("[Desktop Entry]\n");    
-    content.append("Name=");
-    content.append(m_ShortcutName.toLocal8Bit());
-    content.append("\nStartupNotify=true\n");
+    content.append("[Desktop Entry]\n");
+
+    content.append("Name=" + m_ShortcutName.toLocal8Bit() + "\n");
+
+    content.append("StartupNotify=true\n");
     content.append("Terminal=false\n");
     content.append("Type=Application\n");
-    content.append("Icon=");
 
-    if(m_Icon.contains(" "))
-    {
-        content.append("'");
-        content.append(m_Icon.toLocal8Bit());
-        content.append("'");
-    }
-    else
-        content.append(m_Icon.toLocal8Bit());
+    content.append("Icon=" + m_Icon.toLocal8Bit());
 
     content.append("\nExec=");
+    content.append(commandLineFor_ExeFile(m_ExecutableFile) + " %F");
 
-    if(m_ExecutableFile.contains(" "))
-    {
-        content.append("'");
-        content.append(m_ExecutableFile.toLocal8Bit());
-        content.append("'");
-    }
-    else
-        content.append(m_ExecutableFile.toLocal8Bit());
-
-    content.append(" %F");
     return content;
 }
 
-void MainWindow::writePropertiesToFile(QFile *f, QByteArray properties)
+void MainWindow::closeWithApostrophe(QString *string)
 {
-    f->open(QIODevice::WriteOnly);
-    f->write(properties.data());
-    f->close();
-    showLog("Shortcut is created succesfully");
+    QString s;
+    s.append("'" + *string + "'");
+    *string = s;
 }
 
-void MainWindow::showLog(QString log)
+void MainWindow::on_buttonExeFile_clicked()
 {
-    ui->labelLog->setText(log);
+    m_ExecutableFile = QFileDialog::getOpenFileName(this, "Select an executable file", "/home/");
+    ui->textExecutableFile->setText(m_ExecutableFile);
 }
 
-void MainWindow::hideLog()
+void MainWindow::on_buttonIcon_clicked()
 {
-    ui->labelLog->setText("");
-}
-
-bool MainWindow::isFileExist(QString path)
-{
-    QFile file(path);
-    if(file.exists())
-        return true;
-    else
-        return false;
-}
-
-void MainWindow::convertToExecutableFile(QString path)
-{
-    QString cmd = "chmod +x " + path;
-    QProcess::execute(cmd);
+    m_Icon = QFileDialog::getOpenFileName(this, "Select an icon", "/home/");
+    if(m_Icon.isEmpty())
+    {
+        ui->buttonIcon->setText("Select icon file");
+        return;
+    }
+    ui->buttonIcon->setText("");
+    ui->textIcon->setText(m_Icon);
+    QIcon icon = QIcon(m_Icon);
+    ui->buttonIcon->setIcon(icon);
 }
 
 void MainWindow::on_buttonCreate_clicked()
 {
-    m_ShortcutName   = ui->textLauncherName->text();
-    m_ExecutableFile = ui->textExecutableFile->text();
-    m_Icon           = ui->textIcon->text();
+    m_ShortcutName = ui->textLauncherName->text();
 
-    if(!isFileExist(m_ExecutableFile))
-    {
-        showLog("There is not any executable file !");
+    if(isTextBoxesEmpty())
         return;
-    }
 
-    if(!isFileExist(m_Icon))
-    {
-        showLog("There is not any icon file !");
-        return;
-    }
+    QString fileName = m_ShortcutName + ".desktop";
 
-    m_File = createFileOnDesktop(m_ShortcutName);
-    if(m_File)
-        writePropertiesToFile(m_File,shortcutProperties());
+    QFile *f;
+    f = createFileOnDesktop(fileName,shortcutProperties());
+
+    convertExecutableFile(f);
+
+    ui->labelLog->setText("Shortcut is created succesfully");
 }
+
