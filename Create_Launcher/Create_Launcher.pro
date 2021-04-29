@@ -18,7 +18,17 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
+
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    lib/libQt5Core.so.5 \
+    lib/libQt5Gui.so.5 \
+    lib/libQt5Widgets.so.5 \
+    lib/libicudata.so.56 \
+    lib/libicui18n.so.56 \
+    lib/libicuuc.so.56

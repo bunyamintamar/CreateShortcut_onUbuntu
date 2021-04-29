@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->labelLog->setText("");
     ui->textExecutableFile->setText("");
     ui->textIcon->setText("");
-    ui->labelVersionInfo->setText("Version: 2.0.0");
+    ui->labelVersionInfo->setText("Version: 2.1.0");
 }
 
 MainWindow::~MainWindow()

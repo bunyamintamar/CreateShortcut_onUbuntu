@@ -36,7 +36,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../../../Pictures/Icons/shortcut.ico</normaloff>../../../../Pictures/Icons/shortcut.ico</iconset>
+    <normaloff>shortcut.ico</normaloff>shortcut.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
